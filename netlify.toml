@@ -1,0 +1,22 @@
+# NEXA · Netlify deployment config
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# Clean API route → Netlify Function
+[[redirects]]
+  from = "/api/auth/pi"
+  to = "/.netlify/functions/auth-pi"
+  status = 200
+  force = true
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    # Allow Pi Browser SDK + Google Fonts + same-origin XHR
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://sdk.minepi.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.minepi.com; img-src 'self' data: https:; frame-ancestors 'self'"
